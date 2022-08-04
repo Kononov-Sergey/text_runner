@@ -13,6 +13,7 @@ import {
   setCPM,
   setWPM,
   setTime,
+  addedMisspelledWordsNumber,
 } from "../../store/statsReducer";
 
 const Dislpay = () => {
@@ -26,7 +27,6 @@ const Dislpay = () => {
   const [displaySentence, setDisplaySentence] = useState<string>("");
   const [startOfTimer, setStartOfTimer] = useState<number>(0);
   const [typedText, setTypedText] = useState<string>("");
-  const [misspelled, setNumberOfMisspelled] = useState<number>(0);
   const dispatch = useAppDispatch();
 
   const onKeyDownHandler = (event: KeyboardEvent) => {
@@ -45,14 +45,14 @@ const Dislpay = () => {
       });
     }
     if (displaySentence[0] !== currentKey && currentKey.length === 1)
-      setNumberOfMisspelled((state) => ++state);
+      dispatch(addedMisspelledWordsNumber(1));
   };
 
   const dispatchAllStatsInfo = () => {
     dispatch(setTime(Date.now() - startOfTimer));
     dispatch(addedQuatityOfTypedWords(7));
     dispatch(addedQuatityOfTypedChars(typedText.split("").length));
-    dispatch(setAccuracy(misspelled));
+    dispatch(setAccuracy());
     dispatch(setCPM());
     dispatch(setWPM());
   };
@@ -80,7 +80,6 @@ const Dislpay = () => {
       dispatch(setNextSentence());
       // clean up
       setTypedText("");
-      setNumberOfMisspelled(0);
     }
   }, [displaySentence]);
 

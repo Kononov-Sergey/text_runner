@@ -35,10 +35,12 @@ export const statsSlice = createSlice({
     setTime(state, action) {
       state.seconds = action.payload / 1000;
     },
-    setAccuracy(state, action: PayloadAction<number>) {
+    addedMisspelledWordsNumber(state, action: PayloadAction<number>) {
+      state.misspelledWordsNumber += action.payload;
+    },
+    setAccuracy(state) {
       state.accuracy = Math.round(
-        100 -
-          ((state.accuracy + action.payload) / state.quatityOfTypedChars) * 100
+        100 - (state.misspelledWordsNumber / state.quatityOfTypedChars) * 100
       );
     },
     setCPM(state) {
@@ -57,6 +59,7 @@ export const statsSlice = createSlice({
 export const {
   addedQuatityOfTypedWords,
   addedQuatityOfTypedChars,
+  addedMisspelledWordsNumber,
   setTime,
   setAccuracy,
   setCPM,
