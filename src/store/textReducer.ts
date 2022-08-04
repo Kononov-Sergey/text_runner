@@ -2,12 +2,12 @@ import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { AppDispatch } from "./store";
 
-export interface CounterState {
+export interface textState {
   text: string[];
   currentSentence: number;
 }
 
-const initialState: CounterState = {
+const initialState: textState = {
   text: [],
   currentSentence: 0,
 };

@@ -6,6 +6,14 @@ import { RootState } from "../../store/store";
 
 import "./../../index.css";
 import classes from "./Display.module.css";
+import {
+  setAccuracy,
+  addedQuatityOfTypedWords,
+  addedQuatityOfTypedChars,
+  setCPM,
+  setWPM,
+  setTime,
+} from "../../store/statsReducer";
 
 const Dislpay = () => {
   const currentSentence = useSelector(
@@ -16,13 +24,19 @@ const Dislpay = () => {
   );
 
   const [displaySentence, setDisplaySentence] = useState<string>("");
+  const [startOfTimer, setStartOfTimer] = useState<number>(0);
   const [typedText, setTypedText] = useState<string>("");
+  const [misspelled, setNumberOfMisspelled] = useState<number>(0);
   const dispatch = useAppDispatch();
 
   const onKeyDownHandler = (event: KeyboardEvent) => {
     const currentKey = event.key;
+    console.log(currentKey);
 
     if (displaySentence[0] === currentKey) {
+      if (startOfTimer === 0) {
+        setStartOfTimer(Date.now());
+      }
       setTypedText((state) => state + currentKey);
       setDisplaySentence((state) => {
         const newSentenceArray = state.split("");
@@ -30,6 +44,17 @@ const Dislpay = () => {
         return newSentenceArray.join("");
       });
     }
+    if (displaySentence[0] !== currentKey && currentKey.length === 1)
+      setNumberOfMisspelled((state) => ++state);
+  };
+
+  const dispatchAllStatsInfo = () => {
+    dispatch(setTime(Date.now() - startOfTimer));
+    dispatch(addedQuatityOfTypedWords(7));
+    dispatch(addedQuatityOfTypedChars(typedText.split("").length));
+    dispatch(setAccuracy(misspelled));
+    dispatch(setCPM());
+    dispatch(setWPM());
   };
 
   useEffect(() => {
@@ -51,8 +76,11 @@ const Dislpay = () => {
 
   useEffect(() => {
     if (displaySentence.length === 0 && fullTextArray.length > 0) {
-      setTypedText("");
+      dispatchAllStatsInfo();
       dispatch(setNextSentence());
+      // clean up
+      setTypedText("");
+      setNumberOfMisspelled(0);
     }
   }, [displaySentence]);
 
