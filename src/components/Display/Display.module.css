@@ -2,3 +2,37 @@
   display: flex;
   justify-content: center;
 }
+.window {
+  background-color: #16161a;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+}
+.cursor {
+  content: "";
+  position: relative;
+  width: 1px;
+  height: 30px;
+  background-color: #fffffe;
+  animation: 1s blink step-end infinite;
+}
+
+@keyframes blink {
+  from,
+  to {
+    background-color: transparent;
+  }
+  50% {
+    background-color: #fffffe;
+  }
+}
+
+.typed-text {
+  color: #959595;
+}
+
+.typed-text,
+.text {
+  font-size: 24px;
+}
