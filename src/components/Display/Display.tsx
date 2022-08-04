@@ -1,24 +1,30 @@
-import { stat } from "fs";
 import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
+import { useAppDispatch } from "../../store/store";
+import { getTextFromTheServer, setNextSentence } from "../../store/textReducer";
+import { RootState } from "../../store/store";
+
 import "./../../index.css";
 import classes from "./Display.module.css";
 
-const dummydata = {
-  text: "Lorem ipsum dolor sit amet consectetur adipisicing.",
-};
-
 const Dislpay = () => {
-  const [sentence, setSentence] = useState<string>("");
+  const currentSentence = useSelector(
+    (state: RootState) => state.textReducer.currentSentence
+  );
+  const fullTextArray = useSelector(
+    (state: RootState) => state.textReducer.text
+  );
+
+  const [displaySentence, setDisplaySentence] = useState<string>("");
   const [typedText, setTypedText] = useState<string>("");
+  const dispatch = useAppDispatch();
 
   const onKeyDownHandler = (event: KeyboardEvent) => {
     const currentKey = event.key;
-    console.log(sentence);
-    console.log(currentKey);
 
-    if (sentence[0] === currentKey) {
+    if (displaySentence[0] === currentKey) {
       setTypedText((state) => state + currentKey);
-      setSentence((state) => {
+      setDisplaySentence((state) => {
         const newSentenceArray = state.split("");
         newSentenceArray.splice(0, 1);
         return newSentenceArray.join("");
@@ -31,11 +37,25 @@ const Dislpay = () => {
     return () => {
       window.removeEventListener("keydown", onKeyDownHandler);
     };
-  }, [sentence]);
+  }, [displaySentence]);
 
   useEffect(() => {
-    setSentence(dummydata.text);
+    dispatch(getTextFromTheServer());
   }, []);
+
+  useEffect(() => {
+    if (fullTextArray.length !== 0) {
+      setDisplaySentence(fullTextArray[currentSentence]);
+    }
+  }, [currentSentence, fullTextArray]);
+
+  useEffect(() => {
+    if (displaySentence.length === 0 && fullTextArray.length > 0) {
+      setTypedText("");
+      dispatch(setNextSentence());
+    }
+  }, [displaySentence]);
+
   return (
     <div className={classes.wrapper}>
       <div className="container">
@@ -43,7 +63,7 @@ const Dislpay = () => {
           <pre className={classes["typed-text"]}>{typedText}</pre>
           <span className={classes.cursor} />
           <pre className={classes.text}>
-            {sentence}
+            {displaySentence}
             {/* max 55 symbols */}
           </pre>
         </div>
