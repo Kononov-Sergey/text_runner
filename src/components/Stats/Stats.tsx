@@ -1,6 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store/store";
+import classes from "./Stats.module.css";
 
 const Stats = () => {
   const wpm = useSelector((state: RootState) => state.statsReducer.wpm);
@@ -10,9 +11,11 @@ const Stats = () => {
   );
   return (
     <div className="container">
-      <div>{wpm}wpm</div>
-      <div>{cpm}cpm</div>
-      <div>{accuracy}%</div>
+      <div className={classes.wrapper}>
+        <div>wpm: {wpm}</div>
+        <div>cpm: {cpm}</div>
+        <div>Accuracy: {accuracy}%</div>
+      </div>
     </div>
   );
 };
