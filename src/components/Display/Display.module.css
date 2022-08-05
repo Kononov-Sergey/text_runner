@@ -8,6 +8,8 @@
   display: flex;
   align-items: center;
   padding: 0.5rem 1rem;
+  min-width: 900px;
+  margin-bottom: 0.5rem;
 }
 .cursor {
   content: "";
@@ -16,6 +18,9 @@
   height: 30px;
   background-color: #fffffe;
   animation: 1s blink step-end infinite;
+}
+.mistake {
+  background-color: #700000;
 }
 
 @keyframes blink {

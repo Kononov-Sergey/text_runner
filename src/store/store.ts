@@ -1,10 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import textReducer from "./textReducer";
 import statsReducer from "./statsReducer";
+import settingsReducer from "./settingsReducer";
 import { useDispatch } from "react-redux";
 
 export const store = configureStore({
-  reducer: { textReducer, statsReducer },
+  reducer: { textReducer, statsReducer, settingsReducer },
 });
 
 export type RootState = ReturnType<typeof store.getState>;

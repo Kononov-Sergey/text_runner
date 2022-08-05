@@ -1,0 +1,12 @@
+.wrapper {
+  display: flex;
+  justify-content: end;
+  gap: 0.5rem;
+}
+.wrapper button {
+  background-color: transparent;
+  border: none;
+}
+.wrapper span {
+  font-size: 32px;
+}

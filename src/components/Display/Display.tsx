@@ -23,15 +23,17 @@ const Dislpay = () => {
   const fullTextArray = useSelector(
     (state: RootState) => state.textReducer.text
   );
+  const dispatch = useAppDispatch();
 
   const [displaySentence, setDisplaySentence] = useState<string>("");
   const [startOfTimer, setStartOfTimer] = useState<number>(0);
   const [typedText, setTypedText] = useState<string>("");
-  const dispatch = useAppDispatch();
+  const [isWelcomeTextShowing, setIsWelcomeTextShowing] =
+    useState<boolean>(true);
+  const [justMisprint, setJustMisprint] = useState(false);
 
   const onKeyDownHandler = (event: KeyboardEvent) => {
     const currentKey = event.key;
-    console.log(currentKey);
 
     if (displaySentence[0] === currentKey) {
       if (startOfTimer === 0) {
@@ -43,9 +45,16 @@ const Dislpay = () => {
         newSentenceArray.splice(0, 1);
         return newSentenceArray.join("");
       });
+      setIsWelcomeTextShowing(false);
     }
     if (displaySentence[0] !== currentKey && currentKey.length === 1)
-      dispatch(addedMisspelledWordsNumber(1));
+      if (startOfTimer !== 0) {
+        dispatch(addedMisspelledWordsNumber(1));
+        setJustMisprint(true);
+        setTimeout(() => {
+          setJustMisprint(false);
+        }, 200);
+      }
   };
 
   const dispatchAllStatsInfo = () => {
@@ -86,14 +95,12 @@ const Dislpay = () => {
   return (
     <div className={classes.wrapper}>
       <div className="container">
-        <div className={classes.window}>
+        <div className={`${classes.window} ${justMisprint && classes.mistake}`}>
           <pre className={classes["typed-text"]}>{typedText}</pre>
           <span className={classes.cursor} />
-          <pre className={classes.text}>
-            {displaySentence}
-            {/* max 55 symbols */}
-          </pre>
+          <pre className={classes.text}>{displaySentence}</pre>
         </div>
+        {isWelcomeTextShowing && <p>Start typing</p>}
       </div>
     </div>
   );

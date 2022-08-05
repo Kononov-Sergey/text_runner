@@ -25,10 +25,9 @@ export const textSlice = createSlice({
           }
           return true;
         });
-      console.log(arrayOfRowStings.length);
 
       while (arrayOfRowStings.length !== 0) {
-        state.text.push(arrayOfRowStings.splice(0, 7).join(" "));
+        state.text.push(arrayOfRowStings.splice(0, 7).join(" ") + " ");
       }
     },
     setNextSentence(state) {
