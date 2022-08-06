@@ -23,6 +23,11 @@ const Dislpay = () => {
   const fullTextArray = useSelector(
     (state: RootState) => state.textReducer.text
   );
+
+  const autoBackspaceIsOn = useSelector(
+    (state: RootState) => state.settingsReducer.autoBackspace
+  );
+
   const dispatch = useAppDispatch();
 
   const [displaySentence, setDisplaySentence] = useState<string>("");
@@ -34,6 +39,39 @@ const Dislpay = () => {
 
   const onKeyDownHandler = (event: KeyboardEvent) => {
     const currentKey = event.key;
+    console.dir(event);
+
+    if (currentKey === "Backspace" && !event.ctrlKey) {
+      setDisplaySentence((state) => {
+        return typedText === ""
+          ? state
+          : typedText[typedText.length - 1] + state;
+      });
+      setTypedText((state) => {
+        if (state) {
+          const newState = state.split("");
+          newState.pop();
+          return newState.join("");
+        }
+        return "";
+      });
+    }
+
+    if (currentKey === "Backspace" && event.ctrlKey) {
+      setDisplaySentence((state) => {
+        if (typedText) {
+          const arrayOfTypedChars = typedText.split("");
+          const indexOfSpace = arrayOfTypedChars.lastIndexOf(" ");
+          return arrayOfTypedChars.splice(indexOfSpace) + state;
+        }
+        return state;
+      });
+      setTypedText((state) => {
+        const newState = state.split("");
+        newState.pop();
+        return newState.join(" ");
+      });
+    }
 
     if (displaySentence[0] === currentKey) {
       if (startOfTimer === 0) {

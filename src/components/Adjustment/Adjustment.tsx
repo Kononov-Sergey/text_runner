@@ -1,5 +1,4 @@
 import React from "react";
-import Board from "../Board/Board";
 import classes from "./Adjustment.module.css";
 import "./../../index.css";
 import ButtonIcon from "../UI/Buttons/ButtonIcon";
