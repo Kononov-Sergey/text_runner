@@ -3,6 +3,7 @@ import classes from "./ButtonIcon.module.css";
 
 interface ButtonIconProps {
   onClick?: () => void;
+  title: string;
   googleIconClass: string;
   googleIconName: string;
   size: number;
@@ -10,6 +11,7 @@ interface ButtonIconProps {
 
 const ButtonIcon: React.FC<ButtonIconProps> = ({
   onClick,
+  title,
   googleIconName,
   size,
   googleIconClass,
@@ -32,6 +34,7 @@ const ButtonIcon: React.FC<ButtonIconProps> = ({
       onFocus={(event) => {
         console.log(event.target.blur());
       }}
+      title={title}
       onClick={() => {
         setIsHidden((state) => !state);
         if (onClick) {

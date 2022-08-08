@@ -13,15 +13,17 @@ const Adjustment = () => {
   return (
     <div className="container">
       <div className={classes.wrapper}>
-        <ButtonIcon
+        {/* <ButtonIcon
+          title={"On/Off Auto Backspace "}
           onClick={() => {
             dispatch(toggleAutoBackspace());
           }}
           googleIconClass="material-symbols-outlined"
           googleIconName="backspace"
           size={24}
-        />
+        /> */}
         <ButtonIcon
+          title={"Show/hidden the supporting keyboard"}
           onClick={() => {
             dispatch(toggleKeyboardDisplay());
           }}

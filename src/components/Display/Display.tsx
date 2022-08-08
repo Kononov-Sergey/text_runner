@@ -39,6 +39,7 @@ const Dislpay = () => {
 
   const onKeyDownHandler = (event: KeyboardEvent) => {
     const currentKey = event.key;
+
     if (!autoBackspaceIsOn) {
       if (currentKey === "Backspace" && !event.ctrlKey) {
         setDisplaySentence((state) => {
@@ -69,10 +70,10 @@ const Dislpay = () => {
               return " " + state;
             }
             return arrayOfTypedChars.slice(indexOfSpace + 1).join("") + state;
-            // debugger;
           }
           return state;
         });
+
         setTypedText((state) => {
           const secondArrayOfTypedChars = state.split("");
           const index = secondArrayOfTypedChars.lastIndexOf(" ");
