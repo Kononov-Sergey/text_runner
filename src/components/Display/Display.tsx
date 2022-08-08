@@ -39,55 +39,55 @@ const Dislpay = () => {
 
   const onKeyDownHandler = (event: KeyboardEvent) => {
     const currentKey = event.key;
-    console.dir(event);
-
-    if (currentKey === "Backspace" && !event.ctrlKey) {
-      setDisplaySentence((state) => {
-        return typedText === ""
-          ? state
-          : typedText[typedText.length - 1] + state;
-      });
-      setTypedText((state) => {
-        if (state) {
-          const newState = state.split("");
-          newState.pop();
-          return newState.join("");
-        }
-        return "";
-      });
-    }
-
-    if (currentKey === "Backspace" && event.ctrlKey) {
-      // should be refactored later mb, looking a bit ugly and complicated
-      setDisplaySentence((state) => {
-        if (typedText) {
-          const arrayOfTypedChars = typedText.split("");
-          const indexOfSpace = arrayOfTypedChars.lastIndexOf(" ");
-          if (indexOfSpace === -1) {
-            return arrayOfTypedChars.slice(0).join("") + state;
+    if (!autoBackspaceIsOn) {
+      if (currentKey === "Backspace" && !event.ctrlKey) {
+        setDisplaySentence((state) => {
+          return typedText === ""
+            ? state
+            : typedText[typedText.length - 1] + state;
+        });
+        setTypedText((state) => {
+          if (state) {
+            const newState = state.split("");
+            newState.pop();
+            return newState.join("");
           }
-          if (arrayOfTypedChars[arrayOfTypedChars.length - 1] === " ") {
-            return " " + state;
-          }
-          return arrayOfTypedChars.slice(indexOfSpace + 1).join("") + state;
-          // debugger;
-        }
-        return state;
-      });
-      setTypedText((state) => {
-        const secondArrayOfTypedChars = state.split("");
-        const index = secondArrayOfTypedChars.lastIndexOf(" ");
-        if (index === -1) {
           return "";
-        }
-        if (
-          secondArrayOfTypedChars[secondArrayOfTypedChars.length - 1] === " "
-        ) {
-          return secondArrayOfTypedChars.slice(0, index).join("");
-        }
+        });
+      }
 
-        return secondArrayOfTypedChars.slice(0, index + 1).join("");
-      });
+      if (currentKey === "Backspace" && event.ctrlKey) {
+        // should be refactored later mb, looking a bit ugly and complicated
+        setDisplaySentence((state) => {
+          if (typedText) {
+            const arrayOfTypedChars = typedText.split("");
+            const indexOfSpace = arrayOfTypedChars.lastIndexOf(" ");
+            if (indexOfSpace === -1) {
+              return arrayOfTypedChars.slice(0).join("") + state;
+            }
+            if (arrayOfTypedChars[arrayOfTypedChars.length - 1] === " ") {
+              return " " + state;
+            }
+            return arrayOfTypedChars.slice(indexOfSpace + 1).join("") + state;
+            // debugger;
+          }
+          return state;
+        });
+        setTypedText((state) => {
+          const secondArrayOfTypedChars = state.split("");
+          const index = secondArrayOfTypedChars.lastIndexOf(" ");
+          if (index === -1) {
+            return "";
+          }
+          if (
+            secondArrayOfTypedChars[secondArrayOfTypedChars.length - 1] === " "
+          ) {
+            return secondArrayOfTypedChars.slice(0, index).join("");
+          }
+
+          return secondArrayOfTypedChars.slice(0, index + 1).join("");
+        });
+      }
     }
 
     if (displaySentence[0] === currentKey) {
@@ -130,7 +130,7 @@ const Dislpay = () => {
     return () => {
       window.removeEventListener("keydown", onKeyDownHandler);
     };
-  }, [displaySentence]);
+  }, [displaySentence, autoBackspaceIsOn]);
 
   useEffect(() => {
     dispatch(getTextFromTheServer());

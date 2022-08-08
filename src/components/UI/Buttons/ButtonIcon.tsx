@@ -29,6 +29,9 @@ const ButtonIcon: React.FC<ButtonIconProps> = ({
 
   return (
     <button
+      onFocus={(event) => {
+        console.log(event.target.blur());
+      }}
       onClick={() => {
         setIsHidden((state) => !state);
         if (onClick) {
