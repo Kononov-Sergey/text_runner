@@ -58,18 +58,35 @@ const Dislpay = () => {
     }
 
     if (currentKey === "Backspace" && event.ctrlKey) {
+      // should be refactored later mb, looking a bit ugly and complicated
       setDisplaySentence((state) => {
         if (typedText) {
           const arrayOfTypedChars = typedText.split("");
           const indexOfSpace = arrayOfTypedChars.lastIndexOf(" ");
-          return arrayOfTypedChars.splice(indexOfSpace) + state;
+          if (indexOfSpace === -1) {
+            return arrayOfTypedChars.slice(0).join("") + state;
+          }
+          if (arrayOfTypedChars[arrayOfTypedChars.length - 1] === " ") {
+            return " " + state;
+          }
+          return arrayOfTypedChars.slice(indexOfSpace + 1).join("") + state;
+          // debugger;
         }
         return state;
       });
       setTypedText((state) => {
-        const newState = state.split("");
-        newState.pop();
-        return newState.join(" ");
+        const secondArrayOfTypedChars = state.split("");
+        const index = secondArrayOfTypedChars.lastIndexOf(" ");
+        if (index === -1) {
+          return "";
+        }
+        if (
+          secondArrayOfTypedChars[secondArrayOfTypedChars.length - 1] === " "
+        ) {
+          return secondArrayOfTypedChars.slice(0, index).join("");
+        }
+
+        return secondArrayOfTypedChars.slice(0, index + 1).join("");
       });
     }
 
@@ -85,14 +102,18 @@ const Dislpay = () => {
       });
       setIsWelcomeTextShowing(false);
     }
-    if (displaySentence[0] !== currentKey && currentKey.length === 1)
-      if (startOfTimer !== 0) {
-        dispatch(addedMisspelledWordsNumber(1));
-        setJustMisprint(true);
-        setTimeout(() => {
-          setJustMisprint(false);
-        }, 200);
-      }
+
+    if (
+      displaySentence[0] !== currentKey &&
+      currentKey.length === 1 &&
+      startOfTimer !== 0
+    ) {
+      dispatch(addedMisspelledWordsNumber(1));
+      setJustMisprint(true);
+      setTimeout(() => {
+        setJustMisprint(false);
+      }, 200);
+    }
   };
 
   const dispatchAllStatsInfo = () => {
