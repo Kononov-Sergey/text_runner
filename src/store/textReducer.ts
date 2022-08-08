@@ -17,7 +17,7 @@ export const textSlice = createSlice({
   initialState,
   reducers: {
     setText(state, action) {
-      let arrayOfRowStings = action.payload
+      const arrayOfRowStrings = action.payload
         .split(" ")
         .filter((string: string) => {
           if (string === "") {
@@ -26,8 +26,8 @@ export const textSlice = createSlice({
           return true;
         });
 
-      while (arrayOfRowStings.length !== 0) {
-        state.text.push(arrayOfRowStings.splice(0, 7).join(" ") + " ");
+      while (arrayOfRowStrings.length !== 0) {
+        state.text.push(arrayOfRowStrings.splice(0, 7).join(" ") + " ");
       }
     },
     setNextSentence(state) {

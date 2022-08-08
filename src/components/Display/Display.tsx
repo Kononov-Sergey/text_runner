@@ -15,6 +15,9 @@ import {
   setTime,
   addedMisspelledWordsNumber,
 } from "../../store/statsReducer";
+import Modal from "../UI/Modal/Modal";
+import FinalWindow from "../FinalWindow/FinalWindow";
+import { openModalWindow } from "../../store/modalReducer";
 
 const Dislpay = () => {
   const currentSentence = useSelector(
@@ -26,6 +29,9 @@ const Dislpay = () => {
 
   const autoBackspaceIsOn = useSelector(
     (state: RootState) => state.settingsReducer.autoBackspace
+  );
+  const modalStatus = useSelector(
+    (state: RootState) => state.modalReducer.isOpen
   );
 
   const dispatch = useAppDispatch();
@@ -58,7 +64,7 @@ const Dislpay = () => {
       }
 
       if (currentKey === "Backspace" && event.ctrlKey) {
-        // should be refactored later mb, looking a bit ugly and complicated
+        // should be refactored later, looking a bit ugly and complicated
         setDisplaySentence((state) => {
           if (typedText) {
             const arrayOfTypedChars = typedText.split("");
@@ -139,7 +145,14 @@ const Dislpay = () => {
 
   useEffect(() => {
     if (fullTextArray.length !== 0) {
-      setDisplaySentence(fullTextArray[currentSentence]);
+      setDisplaySentence(fullTextArray[currentSentence] || "");
+    }
+    if (
+      currentSentence > fullTextArray.length - 1 &&
+      fullTextArray.length !== 0
+    ) {
+      setTypedText("");
+      dispatch(openModalWindow());
     }
   }, [currentSentence, fullTextArray]);
 
@@ -162,6 +175,7 @@ const Dislpay = () => {
         </div>
         {isWelcomeTextShowing && <p>Start typing</p>}
       </div>
+      {modalStatus && <FinalWindow />}
     </div>
   );
 };
