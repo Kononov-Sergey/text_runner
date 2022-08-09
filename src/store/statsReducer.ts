@@ -53,6 +53,15 @@ export const statsSlice = createSlice({
         0
       );
     },
+    resetAllStats(state) {
+      state.accuracy = 0;
+      state.cpm = 0;
+      state.misspelledWordsNumber = 0;
+      state.quatityOfTypedChars = 0;
+      state.quatityOfTypedWords = 0;
+      state.seconds = 0;
+      state.wpm = 0;
+    },
   },
 });
 
@@ -64,6 +73,7 @@ export const {
   setAccuracy,
   setCPM,
   setWPM,
+  resetAllStats,
 } = statsSlice.actions;
 
 export default statsSlice.reducer;

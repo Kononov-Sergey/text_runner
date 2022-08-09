@@ -145,7 +145,11 @@ const Dislpay = () => {
 
   const dispatchAllStatsInfo = () => {
     dispatch(setTime(Date.now() - startOfTimer));
-    dispatch(addedQuatityOfTypedWords(7));
+    dispatch(
+      addedQuatityOfTypedWords(
+        typedText.split(" ").filter((char) => !!char).length
+      )
+    );
     dispatch(addedQuatityOfTypedChars(typedText.split("").length));
     dispatch(setAccuracy());
     dispatch(setCPM());
@@ -172,6 +176,7 @@ const Dislpay = () => {
       fullTextArray.length !== 0
     ) {
       setTypedText("");
+      setDisplaySentence("");
       dispatch(openModalWindow());
     }
   }, [numOfCurrentSentence, fullTextArray]);
@@ -186,12 +191,14 @@ const Dislpay = () => {
   }, [displaySentence]);
 
   useEffect(() => {
-    const newState = compareTypedAndDesiredText(
-      typedText,
-      fullTextArray,
-      numOfCurrentSentence
-    );
-    setRenderedTypedText(newState);
+    if (fullTextArray[numOfCurrentSentence]) {
+      const newState = compareTypedAndDesiredText(
+        typedText,
+        fullTextArray,
+        numOfCurrentSentence
+      );
+      setRenderedTypedText(newState);
+    }
   }, [typedText, fullTextArray, numOfCurrentSentence]);
 
   return (
@@ -206,7 +213,7 @@ const Dislpay = () => {
                     <span key={Math.random()} className={classes.misspelled}>
                       {object.value}
                     </span>
-                  ); // not a good practice to use Math.random() as id, but I'd hope you will forgive me
+                  ); //  not a good practice to use Math.random() as id, but I'd hope you will forgive me
                 }
                 return object.value;
               }

@@ -5,13 +5,15 @@ import { useAppDispatch } from "../../../store/store";
 import { closeModalWindow } from "../../../store/modalReducer";
 import React, { ReactNode } from "react";
 
-const Backdrop: React.FC = () => {
+const Backdrop: React.FC<{ onClick?: () => void }> = ({ onClick }) => {
   const dispatch = useAppDispatch();
-
   return (
     <div
       onClick={() => {
         dispatch(closeModalWindow());
+        if (onClick) {
+          onClick();
+        }
       }}
       className={classes.backdrop}
     ></div>
@@ -30,13 +32,14 @@ const ModalOverlay: React.FC<{
 
 const Modal: React.FC<{
   children: ReactNode;
-}> = (props) => {
+  onClick?: () => void;
+}> = ({ children, onClick }) => {
   const portalPlace = document.querySelector("#overlays")!;
   return (
     <>
-      {ReactDOM.createPortal(<Backdrop />, portalPlace)}
+      {ReactDOM.createPortal(<Backdrop onClick={onClick} />, portalPlace)}
       {ReactDOM.createPortal(
-        <ModalOverlay>{props.children}</ModalOverlay>,
+        <ModalOverlay>{children}</ModalOverlay>,
         portalPlace
       )}
     </>

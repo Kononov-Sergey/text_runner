@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
+import { Button } from "./Button";
 import classes from "./ButtonIcon.module.css";
 
-interface ButtonIconProps {
-  onClick?: () => void;
-  title: string;
+interface ButtonIconProps extends Button {
   googleIconClass: string;
   googleIconName: string;
   size: number;

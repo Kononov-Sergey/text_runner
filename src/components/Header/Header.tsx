@@ -6,7 +6,9 @@ const Header = () => {
   return (
     <header className={classes.header}>
       <div className="container">
-        <h1>text_runner</h1>
+        <h1>
+          text_<span>runner</span>
+        </h1>
         <h2>
           by <a href="https://t.me/sergo4829">Kononov Sergey</a>
         </h2>

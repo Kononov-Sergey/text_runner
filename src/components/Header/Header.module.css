@@ -5,6 +5,9 @@
   font-size: 42px;
   margin-bottom: 0.5rem;
 }
+.header h1 span {
+  font-style: italic;
+}
 .header h2 {
   font-size: 18px;
 }
