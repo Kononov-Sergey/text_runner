@@ -15,9 +15,12 @@ import {
   setTime,
   addedMisspelledWordsNumber,
 } from "../../store/statsReducer";
-import Modal from "../UI/Modal/Modal";
 import FinalWindow from "../FinalWindow/FinalWindow";
 import { openModalWindow } from "../../store/modalReducer";
+import compareTypedAndDesiredText, {
+  typedTextOjectToDisplayInterface,
+  typeOfText,
+} from "../../utils/compareTypedAndDesiredText";
 
 const Dislpay = () => {
   const numOfCurrentSentence = useSelector(
@@ -39,6 +42,9 @@ const Dislpay = () => {
   const [displaySentence, setDisplaySentence] = useState<string>("");
   const [startOfTimer, setStartOfTimer] = useState<number>(0);
   const [typedText, setTypedText] = useState<string>("");
+  const [renderedTypedText, setRenderedTypedText] = useState<
+    typedTextOjectToDisplayInterface[]
+  >([]);
   const [isWelcomeTextShowing, setIsWelcomeTextShowing] =
     useState<boolean>(true);
   const [justMisprint, setJustMisprint] = useState(false);
@@ -174,21 +180,44 @@ const Dislpay = () => {
     if (displaySentence.length === 0 && fullTextArray.length > 0) {
       dispatchAllStatsInfo();
       dispatch(setNextSentence());
-      // clean up
+
       setTypedText("");
     }
   }, [displaySentence]);
+
+  useEffect(() => {
+    const newState = compareTypedAndDesiredText(
+      typedText,
+      fullTextArray,
+      numOfCurrentSentence
+    );
+    setRenderedTypedText(newState);
+  }, [typedText, fullTextArray, numOfCurrentSentence]);
 
   return (
     <div className={classes.wrapper}>
       <div className="container">
         <div className={`${classes.window} ${justMisprint && classes.mistake}`}>
-          <pre className={classes["typed-text"]}>{typedText}</pre>
+          <pre className={classes["typed-text"]}>
+            {renderedTypedText.map(
+              (object: typedTextOjectToDisplayInterface) => {
+                if (object.type === typeOfText.MISSPELED) {
+                  return (
+                    <span key={Math.random()} className={classes.misspelled}>
+                      {object.value}
+                    </span>
+                  ); // not a good practice to use Math.random() as id, but I'd hope you will forgive me
+                }
+                return object.value;
+              }
+            )}
+          </pre>
           <span className={classes.cursor} />
           <pre className={classes.text}>{displaySentence}</pre>
         </div>
         {isWelcomeTextShowing && <p>Start typing</p>}
       </div>
+
       {modalStatus && <FinalWindow />}
     </div>
   );
