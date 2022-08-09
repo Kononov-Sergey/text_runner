@@ -1,24 +1,27 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import Header from "./components/Header/Header";
+import classes from "./App.module.css";
+import Display from "./components/Display/Display";
+import Adjustment from "./components/Adjustment/Adjustment";
+import Stats from "./components/Stats/Stats";
+import Board from "./components/Board/Board";
+
+import { RootState } from "./store/store";
+import { useSelector } from "react-redux";
 
 function App() {
+  const showBoard = useSelector((state: RootState) => {
+    return state.settingsReducer.displayKeyboard;
+  });
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className={classes.app}>
+      <Header />
+      <main className={classes.main}>
+        <Stats />
+        <Display />
+        <Adjustment />
+        {showBoard && <Board />}
+      </main>
     </div>
   );
 }

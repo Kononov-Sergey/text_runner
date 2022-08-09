@@ -1,0 +1,30 @@
+.btn {
+  position: relative;
+  cursor: pointer;
+}
+.bump {
+  animation: bump 0.2s;
+}
+
+@keyframes bump {
+  from {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.8);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+.turn-off::after {
+  content: "";
+  top: -2px;
+  right: 18px;
+  position: absolute;
+  width: 3px;
+  height: 35px;
+  background-color: #d20000;
+  transform: rotate(45deg);
+}
