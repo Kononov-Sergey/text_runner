@@ -20,8 +20,8 @@ import FinalWindow from "../FinalWindow/FinalWindow";
 import { openModalWindow } from "../../store/modalReducer";
 
 const Dislpay = () => {
-  const currentSentence = useSelector(
-    (state: RootState) => state.textReducer.currentSentence
+  const numOfCurrentSentence = useSelector(
+    (state: RootState) => state.textReducer.numOfCurrentSentence
   );
   const fullTextArray = useSelector(
     (state: RootState) => state.textReducer.text
@@ -45,13 +45,14 @@ const Dislpay = () => {
 
   const onKeyDownHandler = (event: KeyboardEvent) => {
     const currentKey = event.key;
+    const currentSentence = fullTextArray[numOfCurrentSentence];
 
     if (!autoBackspaceIsOn) {
       if (currentKey === "Backspace" && !event.ctrlKey) {
         setDisplaySentence((state) => {
           return typedText === ""
             ? state
-            : typedText[typedText.length - 1] + state;
+            : currentSentence[typedText.length - 1] + state;
         });
         setTypedText((state) => {
           if (state) {
@@ -64,35 +65,40 @@ const Dislpay = () => {
       }
 
       if (currentKey === "Backspace" && event.ctrlKey) {
-        // should be refactored later, looking a bit ugly and complicated
+        const arrayOfTypedChars = typedText.split("");
+        const indexOfSpace = arrayOfTypedChars.lastIndexOf(" ");
+
         setDisplaySentence((state) => {
-          if (typedText) {
-            const arrayOfTypedChars = typedText.split("");
-            const indexOfSpace = arrayOfTypedChars.lastIndexOf(" ");
+          if (typedText !== "") {
             if (indexOfSpace === -1) {
-              return arrayOfTypedChars.slice(0).join("") + state;
+              return (
+                currentSentence
+                  .split("")
+                  .slice(0, arrayOfTypedChars.length)
+                  .join("") + state
+              );
             }
             if (arrayOfTypedChars[arrayOfTypedChars.length - 1] === " ") {
               return " " + state;
             }
-            return arrayOfTypedChars.slice(indexOfSpace + 1).join("") + state;
+            return (
+              currentSentence
+                .split("")
+                .slice(indexOfSpace + 1, typedText.length)
+                .join("") + state
+            );
           }
           return state;
         });
 
-        setTypedText((state) => {
-          const secondArrayOfTypedChars = state.split("");
-          const index = secondArrayOfTypedChars.lastIndexOf(" ");
-          if (index === -1) {
+        setTypedText(() => {
+          if (indexOfSpace === -1) {
             return "";
           }
-          if (
-            secondArrayOfTypedChars[secondArrayOfTypedChars.length - 1] === " "
-          ) {
-            return secondArrayOfTypedChars.slice(0, index).join("");
+          if (arrayOfTypedChars[arrayOfTypedChars.length - 1] === " ") {
+            return arrayOfTypedChars.slice(0, indexOfSpace).join("");
           }
-
-          return secondArrayOfTypedChars.slice(0, index + 1).join("");
+          return arrayOfTypedChars.slice(0, indexOfSpace + 1).join("");
         });
       }
     }
@@ -120,6 +126,14 @@ const Dislpay = () => {
       setTimeout(() => {
         setJustMisprint(false);
       }, 200);
+      if (!autoBackspaceIsOn) {
+        setTypedText((state) => state + currentKey);
+        setDisplaySentence((state) => {
+          const newSentenceArray = state.split("");
+          newSentenceArray.splice(0, 1);
+          return newSentenceArray.join("");
+        });
+      }
     }
   };
 
@@ -145,16 +159,16 @@ const Dislpay = () => {
 
   useEffect(() => {
     if (fullTextArray.length !== 0) {
-      setDisplaySentence(fullTextArray[currentSentence] || "");
+      setDisplaySentence(fullTextArray[numOfCurrentSentence] || "");
     }
     if (
-      currentSentence > fullTextArray.length - 1 &&
+      numOfCurrentSentence > fullTextArray.length - 1 &&
       fullTextArray.length !== 0
     ) {
       setTypedText("");
       dispatch(openModalWindow());
     }
-  }, [currentSentence, fullTextArray]);
+  }, [numOfCurrentSentence, fullTextArray]);
 
   useEffect(() => {
     if (displaySentence.length === 0 && fullTextArray.length > 0) {

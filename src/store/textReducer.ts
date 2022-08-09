@@ -4,12 +4,12 @@ import { AppDispatch } from "./store";
 
 export interface textState {
   text: string[];
-  currentSentence: number;
+  numOfCurrentSentence: number;
 }
 
 const initialState: textState = {
   text: [],
-  currentSentence: 0,
+  numOfCurrentSentence: 0,
 };
 
 export const textSlice = createSlice({
@@ -31,7 +31,7 @@ export const textSlice = createSlice({
       }
     },
     setNextSentence(state) {
-      state.currentSentence++;
+      state.numOfCurrentSentence++;
     },
   },
 });
