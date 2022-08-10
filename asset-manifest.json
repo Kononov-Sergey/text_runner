@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.css": "/Kononov-Sergey/text_runner/static/css/main.591c7da6.css",
-    "main.js": "/Kononov-Sergey/text_runner/static/js/main.180ebc6c.js",
-    "index.html": "/Kononov-Sergey/text_runner/index.html",
-    "main.591c7da6.css.map": "/Kononov-Sergey/text_runner/static/css/main.591c7da6.css.map",
-    "main.180ebc6c.js.map": "/Kononov-Sergey/text_runner/static/js/main.180ebc6c.js.map"
+    "main.css": "/text_runner/static/css/main.591c7da6.css",
+    "main.js": "/text_runner/static/js/main.180ebc6c.js",
+    "index.html": "/text_runner/index.html",
+    "main.591c7da6.css.map": "/text_runner/static/css/main.591c7da6.css.map",
+    "main.180ebc6c.js.map": "/text_runner/static/js/main.180ebc6c.js.map"
   },
   "entrypoints": [
     "static/css/main.591c7da6.css",
